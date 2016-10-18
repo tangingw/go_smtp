@@ -6,12 +6,10 @@ import (
 	"strings"
 )
 
-
 /**
 	Modified from https://gist.github.com/jpillora/cb46d183eca0710d909a
 	Thank you very much.
 **/
-
 
 const (
 	SMTP_SERVER = "smtp.gmail.com"
@@ -48,18 +46,4 @@ func (sender Sender) SendMail(Dest []string, Subject, bodyMessage string) {
 	}
 
 	fmt.Println("Mail sent successfully!")
-}
-
-
-func main() {
-
-	sender := NewSender("<YOUR EMAIL ADDRESS>", "<YOUR EMAIL PASSWORD>")
-
-	//The receiver needs to be in slice as the receive supports multiple receiver
-	Receiver := []string{"abc@gmail.com", "xyz@gmail.com", "larrypage@googlemail.com"} 
-
-	Subject := "Testing email from golang"
-	bodyMessage := "Sending email using Golang. Yeah"
-
-	sender.SendMail(Dest, Subject, bodyMessage)
 }
