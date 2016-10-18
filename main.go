@@ -10,5 +10,5 @@ func main() {
 	Subject := "Testing email from golang"
 	bodyMessage := "Sending email using Golang. Yeah"
 
-	sender.SendMail(Dest, Subject, bodyMessage)
+	sender.SendMail(Receiver, Subject, bodyMessage)
 }
