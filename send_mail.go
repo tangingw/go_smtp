@@ -14,6 +14,9 @@ import (
 **/
 
 const (
+	/**
+		Gmail SMTP Server
+	**/
 	SMTPServer = "smtp.gmail.com"
 )
 
