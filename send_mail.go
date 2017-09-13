@@ -14,7 +14,7 @@ import (
 **/
 
 const (
-	SMTP_SERVER = "smtp.gmail.com"
+	SMTPServer = "smtp.gmail.com"
 )
 
 type Sender struct {
@@ -33,8 +33,8 @@ func (sender Sender) SendMail(Dest []string, Subject, bodyMessage string) {
 		"To: " + strings.Join(Dest, ",") + "\n" +
 		"Subject: " + Subject + "\n" + bodyMessage
 
-	err := smtp.SendMail(SMTP_SERVER+":587",
-		smtp.PlainAuth("", sender.User, sender.Password, SMTP_SERVER),
+	err := smtp.SendMail(SMTPServer+":587",
+		smtp.PlainAuth("", sender.User, sender.Password, SMTPServer),
 		sender.User, Dest, []byte(msg))
 
 	if err != nil {
@@ -60,7 +60,7 @@ func (sender Sender) WriteEmail(dest []string, contentType, subject, bodyMessage
 	header["To"] = receipient
 	header["Subject"] = subject
 	header["MIME-Version"] = "1.0"
-	header["Content-Type"] = "text/html; charset=\"utf-8\""
+	header["Content-Type"] = fmt.Sprintf("%s; charset=\"utf-8\"", contentType)
 	header["Content-Transfer-Encoding"] = "quoted-printable"
 	header["Content-Disposition"] = "inline"
 
