@@ -1,4 +1,4 @@
-package main
+package gomail
 
 import (
 	"bytes"
@@ -13,44 +13,50 @@ import (
 	Thank you very much.
 **/
 
-const (
-	/**
-		Gmail SMTP Server
-	**/
-	SMTPServer = "smtp.gmail.com"
-)
+// SMTPServer stores host, port for SMTP map
+type SMTPServer struct {
+	Host string
+	Port string
+}
 
+// SMTP Servers
+var SMTP = map[string]*SMTPServer{
+	"mail.ru":    &SMTPServer{Host: "smtp.mail.ru", Port: "465"},
+	"yandex.com": &SMTPServer{Host: "smtp.yandex.com", Port: "465"},
+	"gmail.com":  &SMTPServer{Host: "smtp.gmail.com", Port: "465"},
+}
+
+// Sender client request
 type Sender struct {
-	User     string
-	Password string
+	User       string
+	Password   string
+	SMTPServer string
+	SMTPPort   string
 }
 
-func NewSender(Username, Password string) Sender {
-
-	return Sender{Username, Password}
+// NewSender create Sender
+func NewSender(Username, Password, SMTPServer, SMTPPort string) Sender {
+	return Sender{Username, Password, SMTPServer, SMTPPort}
 }
 
-func (sender Sender) SendMail(Dest []string, Subject, bodyMessage string) {
-
+// SendMail send mail to client
+func (sender Sender) SendMail(Dest []string, Subject, bodyMessage string) (err error) {
 	msg := "From: " + sender.User + "\n" +
 		"To: " + strings.Join(Dest, ",") + "\n" +
 		"Subject: " + Subject + "\n" + bodyMessage
 
-	err := smtp.SendMail(SMTPServer+":587",
-		smtp.PlainAuth("", sender.User, sender.Password, SMTPServer),
+	err = smtp.SendMail(sender.SMTPServer+":"+sender.SMTPPort,
+		smtp.PlainAuth("", sender.User, sender.Password, sender.SMTPServer),
 		sender.User, Dest, []byte(msg))
 
 	if err != nil {
-
-		fmt.Printf("smtp error: %s", err)
 		return
 	}
-
-	fmt.Println("Mail sent successfully!")
+	return
 }
 
+// WriteEmail to message
 func (sender Sender) WriteEmail(dest []string, contentType, subject, bodyMessage string) string {
-
 	header := make(map[string]string)
 	header["From"] = sender.User
 
@@ -84,12 +90,12 @@ func (sender Sender) WriteEmail(dest []string, contentType, subject, bodyMessage
 	return message
 }
 
+// WriteHTMLEmail to html email
 func (sender *Sender) WriteHTMLEmail(dest []string, subject, bodyMessage string) string {
-
 	return sender.WriteEmail(dest, "text/html", subject, bodyMessage)
 }
 
+// WritePlainEmail to plain email
 func (sender *Sender) WritePlainEmail(dest []string, subject, bodyMessage string) string {
-
 	return sender.WriteEmail(dest, "text/plain", subject, bodyMessage)
 }

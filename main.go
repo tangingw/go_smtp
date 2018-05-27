@@ -1,11 +1,17 @@
 package main
 
+import (
+	"fmt"
+
+	"github.com/darkfoxs96/go_smtp/gomail"
+)
+
 func main() {
 
-	sender := NewSender("<YOUR EMAIL ADDRESS>", "<YOUR EMAIL PASSWORD>")
+	sender := gomail.NewSender("<YOUR EMAIL ADDRESS>", "<YOUR EMAIL PASSWORD>", gomail.SMTP["yandex.com"].Host, gomail.SMTP["yandex.com"].Port)
 
 	//The receiver needs to be in slice as the receive supports multiple receiver
-	Receiver := []string{"abc@gmail.com", "xyz@gmail.com", "larrypage@googlemail.com"}
+	Receiver := []string{"abc@yandex.com", "xyz@gmail.com", "larrypage@googlemail.com"}
 
 	Subject := "Testing HTLML Email from golang"
 	message := `
@@ -25,5 +31,8 @@ func main() {
 	`
 	bodyMessage := sender.WriteHTMLEmail(Receiver, Subject, message)
 
-	sender.SendMail(Receiver, Subject, bodyMessage)
+	err := sender.SendMail(Receiver, Subject, bodyMessage)
+	if err != nil {
+		fmt.Println("Error: ", err)
+	}
 }
