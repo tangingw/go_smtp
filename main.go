@@ -8,10 +8,10 @@ import (
 
 func main() {
 
-	sender := gomail.NewSender("dark@yandex.com", "123456qwe", gomail.SMTP["yandex.com"].Host, gomail.SMTP["yandex.com"].Port)
+	sender := gomail.NewSender("<YOUR EMAIL ADDRESS>", "<YOUR EMAIL PASSWORD>", gomail.SMTP["yandex.com"].Host, gomail.SMTP["yandex.com"].Port)
 
 	//The receiver needs to be in slice as the receive supports multiple receiver
-	Receiver := []string{"dark@yandex.com"}
+	Receiver := []string{"abc@yandex.com", "xyz@gmail.com", "larrypage@googlemail.com"}
 
 	Subject := "Testing HTLML Email from golang"
 	message := `
